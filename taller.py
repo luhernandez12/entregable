@@ -28,7 +28,7 @@ class Implante:
         return self.__numeroSerie
     def getNombre(self):
         return self.__nombre
-    def setNPaciente(self):
+    def getPaciente(self):
         return self.__paciente
     def getFecha(self):
         return self.__fecha
@@ -140,7 +140,7 @@ class ImplanteCadera(Implante):
     #setters
     def setMateriales(self, material):
         self.__materiales = material
-    def setTamano(self, tamaño):
+    def setTamaño(self, tamaño):
         self.__tamaño = tamaño
     def setTipoF(self, tipo):
         self.__tipoFijacion = tipo
@@ -189,7 +189,7 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
             d=int(input("Ingrese la instancia del implante que desea editar:\n1-Numero de serie\n2-nombre\n3-Paciente\n4-Fecha\n5-Medico\n6-Estado del implante"))
             
             if d==1:#numero de serie
-                valor=self.__diccImplantes.pop(numero_serie)
+                
                 a=int(input("Ingresar el nuevo numero de serie: "))
                 self.__diccImplantes[a]=implante
             elif d==2:#nombre implante
@@ -255,6 +255,52 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                     elif f==3:
                         a=input("Ingrese el tipo de fijacion:")
                         implante.setTipoF(a)
+    
+    def verInventario(self): #Ver inventario
+        print("Inventario")
+
+        for numero_serie, implante in self.__diccImplantes.items():
+            print(f"""Numero de serie:{numero_serie}
+                      Nombre de implante: {implante.getNombre()}
+                      Paciente: {implante.getPaciente()}
+                      Fecha: {implante.getFecha()}
+                      Medico: {implante.getMedico()}
+                      Estado del implante: {implante.getEstado()}""")
+            
+            if isinstance(implante,Marcapasos):
+                print(f"""
+                          Numero de electrodos: {implante.getElectrodos()}
+                          Alambrico o inalambrico: {implante.getAlambrico()}
+                          Frecuencia de estimulacion: {implante.getFrecuencia()}""")
+            
+            elif isinstance(implante,Stend):
+                print(f"""
+                          Longitud: {implante.getLongitud()}
+                          Diametro: {implante.getDiametro()}
+                          Material: {implante.getMaterial()}""")
+            
+            elif isinstance(implante,ImplanteDental):
+                print(f"""
+                          Forma: {implante.getForma()}
+                          Sistema de fijacion: {implante.getSistemaFijacion()}
+                          Material: {implante.getMaterial()}""")
+            
+            elif isinstance(implante,ImplanteRodillas):
+                print(f"""
+                          Material: {implante.getMateriales()}
+                          Tamaño: {implante.getTamaño()}
+                          Forma: {implante.getTipoF()}""")
+            
+            elif isinstance(implante,ImplanteCadera):
+                print(f"""
+                          Material: {implante.getMateriales()}
+                          Tamaño: {implante.getTamaño()}
+                          Forma: {implante.getTipoF()}""")
+            
+            print()
+
+        
+
 
 
     
@@ -262,15 +308,10 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
 
 def main():
     sistema = Sistema()  # Esto debería estar fuera del bucle while para evitar la re-creación en cada iteración
-    marcapasos=Marcapasos()
-    stend=Stend()
-    implante_dental=ImplanteDental()
-    implante_rodilla=ImplanteRodillas()
-    implante_cadera=ImplanteCadera()
-    sistema=Sistema()
+    
 
     while True:
-        menu = int(input("Ingrese la opcion que desea:\n1-Ingresar implante\n2-Eliminar\n3-Editar informacion\n4-Visualizar inventario completo\n"))
+        menu = int(input("Ingrese la opcion que desea:\n1-Ingresar implante\n2-Eliminar\n3-Editar informacion\n4-Visualizar inventario completo\n5-Salir"))
 
         if menu == 1:
             numero_serie=int(input("Ingresar numero de serie: "))
@@ -285,7 +326,7 @@ def main():
                 electrodos=int(input("Ingresar el numero de electrodos: "))
                 alambrico=input("Ingresar si es alambrico o inalambrio: ")
                 frecuencia_es=float(input("Ingresar frecuencia de estimulacion: "))
-                
+                marcapasos=Marcapasos()
                 #asignacion de atributos 
                 marcapasos.setNumeroSerie(numero_serie)
                 marcapasos.setNombre(nombre)
@@ -305,7 +346,7 @@ def main():
                 material=input("Ingresar el material del stend: ")
 
                 #Asignacion de atributos 
-
+                stend=Stend()
                 stend.setNumeroSerie(numero_serie)
                 stend.setNombre(nombre)
                 stend.setPaciente(paciente)
@@ -317,13 +358,16 @@ def main():
                 stend.setMaterial(material)
                 sistema.agregarImplante(numero_serie, stend)
             
-            elif n==3:  #Implante dental 
-                nombre="Implante Dental"
-                forma=input("Ingresar forma: ")
-                sistema=input("Ingresar sistema de fijacion: ")
-                material=input("Ingresar material: ")
+            elif n == 3:  # Implante dental 
+                nombre = "Implante Dental"
+                forma = input("Ingresar forma: ")
+                sistema_fijacion = input("Ingresar sistema de fijacion: ")
+                material = input("Ingresar material: ")
                 
-                #Asignacion de atributos 
+                
+                implante_dental = ImplanteDental()
+                
+                # Asignacion de atributos 
                 implante_dental.setNumeroSerie(numero_serie)
                 implante_dental.setNombre(nombre)
                 implante_dental.setPaciente(paciente)
@@ -331,16 +375,17 @@ def main():
                 implante_dental.setMedico(medico)
                 implante_dental.setEstado(estado)
                 implante_dental.setForma(forma)
-                implante_dental.setSistemaF(sistema)
+                implante_dental.setSistemaF(sistema_fijacion)
                 implante_dental.setMaterial(material)
+                
                 sistema.agregarImplante(numero_serie, implante_dental)
-            
+  
             elif n==4: #Implante Rodilla 
                 nombre="Implante Rodilla"
                 material=input("Ingresar material: ")
                 tamaño=int(input("Ingresar tamaño: "))
                 tipo=input("Ingresar tipo de fijacion: ")
-
+                implante_rodilla=ImplanteRodillas()
                 #Asignacion de atributos 
                 implante_rodilla.setNumeroSerie(numero_serie)
                 implante_rodilla.setNombre(nombre)
@@ -358,7 +403,7 @@ def main():
                 material=input("Ingresar material: ")
                 tamaño=int(input("Ingresar tamaño: "))
                 tipo=input("Ingresar tipo de fijacion: ")
-
+                implante_cadera=ImplanteCadera()
                 #Asignacion de atributos 
                 implante_cadera.setNumeroSerie(numero_serie)
                 implante_cadera.setNombre(nombre)
@@ -379,11 +424,12 @@ def main():
             numero_serie = int(input("Ingrese el numero de serie del implante: "))
             if sistema.verificacion(numero_serie):
                 dispositivo = sistema.getDiccImplantes()
-                objeto = dispositivo.pop(numero_serie)
-                sistema.editar_inf(numero_serie, objeto)
+                sistema.editar_inf(numero_serie)
 
         elif menu == 4:
-            print("Inventario completo:", sistema.getDiccImplantes())
-
+            sistema.verInventario()
+        
+        elif menu==5:
+            break
 
 main()
