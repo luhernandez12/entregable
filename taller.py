@@ -213,7 +213,7 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
             return print(f"No se pudo eliminar el implante con el numero de serie {numero_serie}")
     
     def editar_inf(self,numero_serie):       #editar informacion
-        implante=self.__diccImplantes.pop(numero_serie)
+        implante=self.__diccImplantes.get(numero_serie)
         r=int(input("Ingrese si desea cambiar:\n1-Registros del paciente y asigancion y datos de implantes\n2.Datos del implante y Caracteristicas espacificas del implante "))
 
         if r==1: #registros del paciente, asiganacion y datos del implante
@@ -246,15 +246,13 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
             elif d==9:  #Mantenimiento
                 a=input("Ingrese el nuevo mantenimiento: ")
                 implante.setMantenimiento(a)
-                
-
         
         elif r==2: #Datos del implante y caracteristicas especificas del implante
-            if implante.getNombre=="Marcapasos":  #Marcapasos
+            if implante.getNombre()=="Marcapasos":  #Marcapasos
                 o=int(input("Ingrese la opcion de cambio:\n1-#Electros\n2-Alambrico o inalambrico\n3-Frecuencia de estimulacion"))
                 if o==1:
                     a=int(input("Ingrese nuevo numero del electros: "))
-                    implante.setElectrodo(a)
+                    implante.setElectrodos(a)
                 elif o==2:
                     a=input("Ingrese si es alambrico o inalambrico: ")
                     implante.set_alambrico(a)
@@ -262,7 +260,7 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                     a=float(input("Ingrese el numero de frecuencia: "))
                     implante.setFrecuencia(a)
             
-            elif implante.getNombre=="Stend Coronario": #Stend
+            elif implante.getNombre()=="Stend Coronario": #Stend
                 f=int(input("Ingrese la caracteritica que desea editar:\n1-Longitud\n2-Diametro\n3-Material"))
                 if f==1:
                     a=float(input("Ingrese la nueva longitud: "))
@@ -274,7 +272,7 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                     a=input("Ingrese el nuevo material : ")
                     implante.setMaterial(a)
             
-            elif implante.getNombre=="Implante Dental": #Implante dental
+            elif implante.getNombre()=="Implante Dental": #Implante dental
                 f=int(input("Ingrese la caracteristica que desea editar:\n1-Forma\n2-Sistema de fijacion\n3-Material"))
                 if f==1:
                     a=input("Ingrese la nueva forma: ")
@@ -286,7 +284,7 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                     a=input("Ingresar el nuevo materia: ")
                     implante.setMaterial(a)
             
-            elif implante.getNombre=="Implante Rodilla" or implante.getNombre=="Implante Cadera": #Implante de rodilla o cadera  
+            elif implante.getNombre()=="Implante Rodilla" or implante.getNombre=="Implante Cadera": #Implante de rodilla o cadera  
                     f=int(input("Ingrese la caracteristica que desea editar:\1-Materiales\n2-Tamaño\n3-Tipo de fijacion "))
                     if f==1:
                         a=input("Ingrese el nuevo material: ")
@@ -485,7 +483,6 @@ def main():
         elif menu == 3:      #Editar informacion
             numero_serie = int(input("Ingrese el numero de serie del implante: "))
             if sistema.verificacion(numero_serie):
-                dispositivo = sistema.getDiccImplantes()
                 sistema.editar_inf(numero_serie)
 
         elif menu == 4:        #Vizualizar inventario
