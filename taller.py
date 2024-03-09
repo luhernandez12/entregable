@@ -45,9 +45,32 @@ class RegistroyAsigenacion:
     def getEstado(self):
         return self.__estadoImplante
 
-    
+
+class SeguimientoImplante:
+    def __init__(self):
+        self.__fecha_revision=""
+        self.__seguimiento=""
+        self.__mantenimiento=""
+
+    #Setters
+    def setSeguimiento(self,seguimiento):
+        self.__seguimiento=seguimiento
+    def setFechaRevision(self,fecha):
+        self.__fecha_revision=fecha
+    def setMantenimiento(self,mantenimiento):
+        self.__mantenimiento=mantenimiento
+
+    #getters
+    def getSeguimiento(self):
+        return self.__seguimiento
+    def getFechaRevision(self):
+        return self.__fecha_revision
+    def getMantenimiento(self):
+        return self.__mantenimiento
+
+
         
-class Marcapasos(Implante, RegistroyAsigenacion): #Clase marcapasos con los atributos especificos 
+class Marcapasos(Implante, RegistroyAsigenacion,SeguimientoImplante): #Clase marcapasos con los atributos especificos 
     def __init__(self):
         super().__init__()
         self.__electrodos = 0
@@ -70,7 +93,7 @@ class Marcapasos(Implante, RegistroyAsigenacion): #Clase marcapasos con los atri
     def getFrecuencia(self):
         return self.__frecuencia_estimulacion
 
-class Stend(Implante,RegistroyAsigenacion):
+class Stend(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def __init__(self):
         super().__init__()
         self.__longitud = 0.0
@@ -94,7 +117,7 @@ class Stend(Implante,RegistroyAsigenacion):
     def getMaterial(self):
         return self.__material
 
-class ImplanteDental(Implante,RegistroyAsigenacion):
+class ImplanteDental(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def __init__(self):
         super().__init__()
         self.__forma = ""
@@ -117,7 +140,7 @@ class ImplanteDental(Implante,RegistroyAsigenacion):
     def getMaterial(self):
         return self.__material
 
-class ImplanteRodillas(Implante,RegistroyAsigenacion):
+class ImplanteRodillas(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -140,7 +163,7 @@ class ImplanteRodillas(Implante,RegistroyAsigenacion):
     def getTipoF(self):
         return self.__tipoFijacion
 
-class ImplanteCadera(Implante,RegistroyAsigenacion):
+class ImplanteCadera(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -167,24 +190,22 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
     def __init__(self):
         super().__init__()
         self.__diccImplantes = {}
-
     def setDiccImplantes(self, diccionario):
         self.__diccImplantes = diccionario
-
     def getDiccImplantes(self):
         return self.__diccImplantes
 
-    def verificacion(self, numero):
+    def verificacion(self, numero):   #metodo de verificacion
         if self.__diccImplantes.get(numero) is not None:
             return True
         else:
             print("El numero de serie ingresado no esta asociado a ningun implante en el sistema")
             return False  
 
-    def agregarImplante(self, numero_serie, implante):
+    def agregarImplante(self, numero_serie, implante):    #metodo para agregar 
         self.__diccImplantes[numero_serie] = implante
 
-    def eliminarImplante(self, numero_serie):
+    def eliminarImplante(self, numero_serie):            #Metodo de eliminar implante 
         if self.verificacion(numero_serie):
             del self.__diccImplantes[numero_serie]
             return print(f"Se elimino correctamente el implante con numero de serie {numero_serie}")
@@ -196,7 +217,7 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
         r=int(input("Ingrese si desea cambiar:\n1-Registros del paciente y asigancion y datos de implantes\n2.Datos del implante y Caracteristicas espacificas del implante "))
 
         if r==1: #registros del paciente, asiganacion y datos del implante
-            d=int(input("Ingrese la instancia del implante que desea editar:\n1-Numero de serie\n2-nombre\n3-Paciente\n4-Fecha\n5-Medico\n6-Estado del implante"))
+            d=int(input("Ingrese la instancia del implante que desea editar:\n1-Numero de serie\n2-nombre\n3-Paciente\n4-Fecha\n5-Medico\n6-Estado del implante\n7-Seguimiento de la vida util\n8-FEcha de revision\n9-Mantenimiento"))
             
             if d==1:#numero de serie
                 
@@ -216,6 +237,17 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
             elif d==6:#Estado del implante
                 a=input("Ingresar nuevo estado del implante: ")
                 implante.setEstado(a)
+            elif d==7: #SEguimiento de la vida util 
+                a=input("Ingrese nuevo seguimiento de la vida util: ")
+                implante.setSeguimiento(a)
+            elif d==8:  #Fecha de revision 
+                s=input("Ingrese la nueva fecha de revision: ")
+                implante.setFechaRevision(a)
+            elif d==9:  #Mantenimiento
+                a=input("Ingrese el nuevo mantenimiento: ")
+                implante.setMantenimiento(a)
+                
+
         
         elif r==2: #Datos del implante y caracteristicas especificas del implante
             if implante.getNombre=="Marcapasos":  #Marcapasos
@@ -276,6 +308,9 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                       Fecha: {implante.getFecha()}
                       Medico: {implante.getMedico()}
                       Estado del implante: {implante.getEstado()}
+                      SEguimineto vida util: {implante.getSeguimiento()}
+                      Fecha de revision: {implante.getFechaRevision()}
+                      Mantenimiento: {implante.getMantenimiento()}
                       Datos especificos:""")
             
             if isinstance(implante,Marcapasos):
@@ -317,13 +352,17 @@ def main():
     while True:
         menu = int(input("Ingrese la opcion que desea:\n1-Ingresar implante\n2-Eliminar\n3-Editar informacion\n4-Visualizar inventario completo\n5-Salir"))
 
-        if menu == 1:
+        if menu == 1:    #Ingresar 
             numero_serie=int(input("Ingresar numero de serie: "))
             n=int(input("Seleccione nombre del  implante: \n1-Marcapasos\n2-Stend coronario\n3-Implante dental\n4-Implante de rodilla\n5-Implante de cadera"))
             paciente=input("Ingresa nombre del paciente asociado al implante: ")
             fecha=input("Ingresar la fecha de ingreso: ")
             medico=input("Ingresar medico responsable: : ")
             estado=input("Ingresar el esatdo del implante: ")
+            seguimiento=input("Ingresar informacion de seguimiento: ")
+            fecha_revision=input("Ingresar la fecha de revision: ")
+            mantenimiento=input("Ingresar mantenimiento")           
+
 
             if n==1:   #Marcapasos
                 nombre="Marcapasos"
@@ -333,11 +372,14 @@ def main():
                 marcapasos=Marcapasos()
                 #asignacion de atributos 
                 marcapasos.setNumeroSerie(numero_serie)
-                marcapasos.setNombre(nombre)
                 marcapasos.setPaciente(paciente)
                 marcapasos.setFecha(fecha)
                 marcapasos.setMedico(medico)
                 marcapasos.setEstado(estado)
+                marcapasos.setNombre(nombre)
+                marcapasos.setSeguimiento(seguimiento)
+                marcapasos.setFechaRevision(fecha_revision)
+                marcapasos.setMantenimiento(mantenimiento)
                 marcapasos.setElectrodos(electrodos)
                 marcapasos.setAlambrico(alambrico)
                 marcapasos.setFrecuencia(frecuencia_es)
@@ -352,11 +394,15 @@ def main():
                 #Asignacion de atributos 
                 stend=Stend()
                 stend.setNumeroSerie(numero_serie)
-                stend.setNombre(nombre)
+                
                 stend.setPaciente(paciente)
                 stend.setFecha(fecha)
                 stend.setMedico(medico)
                 stend.setEstado(estado)
+                stend.setNombre(nombre)
+                stend.setSeguimiento(seguimiento)
+                stend.setFechaRevision(fecha_revision)
+                stend.setMantenimiento(mantenimiento)
                 stend.setLongitud(longitud)
                 stend.setDiametro(diametro)
                 stend.setMaterial(material)
@@ -373,11 +419,15 @@ def main():
                 
                 # Asignacion de atributos 
                 implante_dental.setNumeroSerie(numero_serie)
-                implante_dental.setNombre(nombre)
+                
                 implante_dental.setPaciente(paciente)
                 implante_dental.setFecha(fecha)
                 implante_dental.setMedico(medico)
                 implante_dental.setEstado(estado)
+                implante_dental.setNombre(nombre)
+                implante_dental.setSeguimiento(seguimiento)
+                implante_dental.setFechaRevision(fecha_revision)
+                implante_dental.setMantenimiento(mantenimiento)
                 implante_dental.setForma(forma)
                 implante_dental.setSistemaF(sistema_fijacion)
                 implante_dental.setMaterial(material)
@@ -392,11 +442,15 @@ def main():
                 implante_rodilla=ImplanteRodillas()
                 #Asignacion de atributos 
                 implante_rodilla.setNumeroSerie(numero_serie)
-                implante_rodilla.setNombre(nombre)
+                
                 implante_rodilla.setPaciente(paciente)
                 implante_rodilla.setFecha(fecha)
                 implante_rodilla.setMedico(medico)
                 implante_rodilla.setEstado(estado)
+                implante_rodilla.setNombre(nombre)
+                implante_rodilla.setSeguimiento(seguimiento)
+                implante_rodilla.setFechaRevision(fecha_revision)
+                implante_rodilla.setMantenimiento(mantenimiento)
                 implante_rodilla.setMateriales(material)
                 implante_rodilla.setTamaño(tamaño)
                 implante_rodilla.setTipoF(tipo)
@@ -410,30 +464,34 @@ def main():
                 implante_cadera=ImplanteCadera()
                 #Asignacion de atributos 
                 implante_cadera.setNumeroSerie(numero_serie)
-                implante_cadera.setNombre(nombre)
+                
                 implante_cadera.setPaciente(paciente)
                 implante_cadera.setFecha(fecha)
                 implante_cadera.setMedico(medico)
                 implante_cadera.setEstado(estado)
+                implante_cadera.setNombre(nombre)
+                implante_cadera.setSeguimiento(seguimiento)
+                implante_cadera.setFechaRevision(fecha_revision)
+                implante_cadera.setMantenimiento(mantenimiento)
                 implante_cadera.setMateriales(material)
                 implante_cadera.setTamaño(tamaño)
                 implante_cadera.setTipoF(tipo)
                 sistema.agregarImplante(numero_serie,implante_cadera)
 
-        elif menu == 2:
+        elif menu == 2:   #Eliminar
             numero_serie = int(input("Ingrese el numero de serie del implante: "))
             sistema.eliminarImplante(numero_serie)
 
-        elif menu == 3:
+        elif menu == 3:      #Editar informacion
             numero_serie = int(input("Ingrese el numero de serie del implante: "))
             if sistema.verificacion(numero_serie):
                 dispositivo = sistema.getDiccImplantes()
                 sistema.editar_inf(numero_serie)
 
-        elif menu == 4:
+        elif menu == 4:        #Vizualizar inventario
             sistema.verInventario()
         
-        elif menu==5:
+        elif menu==5:           #Salida
             break
 
 main()
