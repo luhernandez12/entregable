@@ -1,26 +1,14 @@
-class Implante:
+class Implante:  #Clase padre, contiene la informacion asociada que debe tener cada implante, se le asigno un numero de serie para que la verificacion sea mas sencilla 
     def __init__(self):
         self.__numeroSerie = 0
         self.__nombre = ""
-        self.__paciente=""
-        self.__fecha=""
-        self.__medico=""
-        self.__estadoImplante=""
+       
 
-    
     #setters
     def setNumeroSerie(self, numero):
         self.__numeroSerie = numero
     def setNombre(self, nombre):
         self.__nombre = nombre
-    def setPaciente(self,paciente):
-        self.__paciente=paciente
-    def setFecha(self,fecha):
-        self.__fecha=fecha
-    def setMedico(self,medico):
-        self.__medico=medico
-    def setEstado(self,estado):
-        self.__estadoImplante=""
     
     
     #getters
@@ -28,6 +16,26 @@ class Implante:
         return self.__numeroSerie
     def getNombre(self):
         return self.__nombre
+   
+
+class RegistroyAsigenacion:
+    def __init__(self):
+        self.__paciente=""
+        self.__fecha=""
+        self.__medico=""
+        self.__estadoImplante=""
+
+    #setter 
+    def setPaciente(self,paciente):
+        self.__paciente=paciente
+    def setFecha(self,fecha):
+        self.__fecha=fecha
+    def setMedico(self,medico):
+        self.__medico=medico
+    def setEstado(self,estado):
+        self.__estadoImplante=estado
+    
+    #GETTER
     def getPaciente(self):
         return self.__paciente
     def getFecha(self):
@@ -37,7 +45,9 @@ class Implante:
     def getEstado(self):
         return self.__estadoImplante
 
-class Marcapasos(Implante):
+    
+        
+class Marcapasos(Implante, RegistroyAsigenacion): #Clase marcapasos con los atributos especificos 
     def __init__(self):
         super().__init__()
         self.__electrodos = 0
@@ -60,7 +70,7 @@ class Marcapasos(Implante):
     def getFrecuencia(self):
         return self.__frecuencia_estimulacion
 
-class Stend(Implante):
+class Stend(Implante,RegistroyAsigenacion):
     def __init__(self):
         super().__init__()
         self.__longitud = 0.0
@@ -84,7 +94,7 @@ class Stend(Implante):
     def getMaterial(self):
         return self.__material
 
-class ImplanteDental(Implante):
+class ImplanteDental(Implante,RegistroyAsigenacion):
     def __init__(self):
         super().__init__()
         self.__forma = ""
@@ -107,7 +117,7 @@ class ImplanteDental(Implante):
     def getMaterial(self):
         return self.__material
 
-class ImplanteRodillas(Implante):
+class ImplanteRodillas(Implante,RegistroyAsigenacion):
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -130,7 +140,7 @@ class ImplanteRodillas(Implante):
     def getTipoF(self):
         return self.__tipoFijacion
 
-class ImplanteCadera(Implante):
+class ImplanteCadera(Implante,RegistroyAsigenacion):
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -265,7 +275,8 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                       Paciente: {implante.getPaciente()}
                       Fecha: {implante.getFecha()}
                       Medico: {implante.getMedico()}
-                      Estado del implante: {implante.getEstado()}""")
+                      Estado del implante: {implante.getEstado()}
+                      Datos especificos:""")
             
             if isinstance(implante,Marcapasos):
                 print(f"""
@@ -299,17 +310,10 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
             
             print()
 
-        
-
-
-
-    
-
 
 def main():
     sistema = Sistema()  # Esto debería estar fuera del bucle while para evitar la re-creación en cada iteración
     
-
     while True:
         menu = int(input("Ingrese la opcion que desea:\n1-Ingresar implante\n2-Eliminar\n3-Editar informacion\n4-Visualizar inventario completo\n5-Salir"))
 
