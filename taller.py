@@ -1,4 +1,4 @@
-class RegistroyAsigenacion:
+class RegistroyAsigenacion:  #Clase para agregar paciente y asociarlo a un implante 
     def __init__(self):
         self.__paciente=""
         self.__fecha=""
@@ -26,7 +26,7 @@ class RegistroyAsigenacion:
         return self.__estadoImplante
 
 
-class SeguimientoImplante:
+class SeguimientoImplante: #Clase para agregar informacion de datos de seguimiento de vida util 
     def __init__(self):
         self.__fecha_revision=""
         self.__seguimiento=""
@@ -90,7 +90,7 @@ class Marcapasos(Implante): #Clase marcapasos con los atributos especificos
     def getFrecuencia(self):
         return self.__frecuencia_estimulacion
 
-class Stend(Implante):
+class Stend(Implante):   #Clase stend con atributos:longitud, diametro y material
     def __init__(self):
         super().__init__()
         self.__longitud = 0.0
@@ -114,7 +114,7 @@ class Stend(Implante):
     def getMaterial(self):
         return self.__material
 
-class ImplanteDental(Implante):
+class ImplanteDental(Implante): #Clase implante dental, atributos de forma, sistema de fijacion y material
     def __init__(self):
         super().__init__()
         self.__forma = ""
@@ -137,7 +137,7 @@ class ImplanteDental(Implante):
     def getMaterial(self):
         return self.__material
 
-class ImplanteRodillas(Implante):
+class ImplanteRodillas(Implante):   #Clase implante de rodillas, atributos: materiales, tamaño y tipo de fijacion
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -160,7 +160,7 @@ class ImplanteRodillas(Implante):
     def getTipoF(self):
         return self.__tipoFijacion
 
-class ImplanteCadera(Implante):
+class ImplanteCadera(Implante):    #Clase implante de cadera, atributos: materiales, tamaño y tipo de fijacion
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -183,7 +183,7 @@ class ImplanteCadera(Implante):
     def getTipoF(self):
         return self.__tipoFijacion
 
-class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCadera):
+class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCadera):   #Clase sistema donde se va a alamacenar cada implante con numero de serie, ademas llava acabo las acciones: verificar, agregar, eliminar y editar informacion
     def __init__(self):
         super().__init__()
         self.__diccImplantes = {}
@@ -193,25 +193,27 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
         return self.__diccImplantes
 
     def verificacion(self, numero):   #metodo de verificacion
-        if self.__diccImplantes.get(numero) is not None:
-            return True
+        if self.__diccImplantes.get(numero) is not None:  #uso de metodo get para encontrar el diccionario el objeto atravez del numero de serie en diccionario 
+            return True   #Se usa en el condicional para saber si sse ecnontro o no (forma de uso)
         else:
-            print("El numero de serie ingresado no esta asociado a ningun implante en el sistema")
+            print("El numero de serie ingresado no esta asociado a ningun implante en el sistema")  #Mensaje en caso de no encontrar implante
             return False  
 
     def agregarImplante(self, numero_serie, implante):    #metodo para agregar 
-        self.__diccImplantes[numero_serie] = implante
+        self.__diccImplantes[numero_serie] = implante     #Agregar por medio de llave-valor
 
     def eliminarImplante(self, numero_serie):            #Metodo de eliminar implante 
-        if self.verificacion(numero_serie):
-            del self.__diccImplantes[numero_serie]
+        if self.verificacion(numero_serie):           
+            del self.__diccImplantes[numero_serie]    #Se usa el metodo del en caso de encontrar el implante en el diccionario
             return print(f"Se elimino correctamente el implante con numero de serie {numero_serie}")
         else:
             return print(f"No se pudo eliminar el implante con el numero de serie {numero_serie}")
     
     def editar_inf(self,numero_serie):       #editar informacion
+        #Se creo un menu para hacer el metood de edicion más ordenado, y asi se desprendera otro menu 
         implante=self.__diccImplantes.get(numero_serie)
         r=int(input("Ingrese si desea cambiar:\n1-Registros del paciente y asigancion y datos de implantes\n2.Datos del implante y Caracteristicas espacificas del implante "))
+        #Se uso la herencia para usar metodos set de cada uno de los atributos de manera que se le pueda asiganar las nuevas variables al metood ya ingresado 
 
         if r==1: #registros del paciente, asiganacion y datos del implante
             d=int(input("Ingrese la instancia del implante que desea editar:\n1-Numero de serie\n2-nombre\n3-Paciente\n4-Fecha\n5-Medico\n6-Estado del implante\n7-Seguimiento de la vida util\n8-FEcha de revision\n9-Mantenimiento"))
@@ -245,6 +247,10 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
                 implante.setMantenimiento(a)
         
         elif r==2: #Datos del implante y caracteristicas especificas del implante
+            #se uso condicionles en los cuales se uso los metodos get de los atributo de cada implante, usandolos por medio de la herencia continua, de manera que
+            #al usar este metodo y compararlo con el nombre de cada implante desplegara un menu especifico de cada implante, permitindo editar la informacion
+            #especifica de cada implante
+
             if implante.getNombre()=="Marcapasos":  #Marcapasos
                 o=int(input("Ingrese la opcion de cambio:\n1-#Electros\n2-Alambrico o inalambrico\n3-Frecuencia de estimulacion"))
                 if o==1:
@@ -296,6 +302,16 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
     def verInventario(self): #Ver inventario
         print("Inventario")
 
+        #Especificamente en este metodo se uso for para que recorra todo el diccionario  en el cual se uso .items() para poder acceder tanto a la clave
+        #como al valor, posteriormente se uso los metodos get de las calses heredadas para enocntra cada uno de los atributos que se encontran en todos los
+        #implante y se los mostro de manera ordenada con formateo de strings.
+
+        #Por otro lado se uso isinstance como metodo de reconocimiento de metodos, entonce si se reconocia que el objeto implante era de clase marcapasos
+        #por ejemplo se dimprima ordenadamente los datos de electroso, alambrico o inalambrico y frecuencia de estimulacion, tambien por medio de los 
+        #metodos get; asi se realizo con todas las clases de implantes creadas, ya que cada una tenia sus caracteriticas espacificas qeu no podian ser
+        #nombradas de la misma manera 
+
+
         for numero_serie, implante in self.__diccImplantes.items():
             print(f"""Numero de serie:{numero_serie}
                       Nombre de implante: {implante.getNombre()}
@@ -342,12 +358,16 @@ class Sistema(Marcapasos, Stend, ImplanteDental, ImplanteRodillas, ImplanteCader
 
 
 def main():
-    sistema = Sistema()  # Esto debería estar fuera del bucle while para evitar la re-creación en cada iteración
+    sistema = Sistema()  
     
     while True:
         menu = int(input("Ingrese la opcion que desea:\n1-Ingresar implante\n2-Eliminar\n3-Editar informacion\n4-Visualizar inventario completo\n5-Salir"))
 
         if menu == 1:    #Ingresar 
+
+            #Se uso la infomacion ingresad por usuario para asignarla a un objeto tipo implante( espcificamente se ingresa dentro de cada uno de los condiconales 
+            # que van de acuerdo al nombre, debido a qeu no todas las clases de implante tiene las mismas caracteristicas), inicialmente solo se pide los datos
+            #que comparten todas las calses de implantes
             numero_serie=int(input("Ingresar numero de serie: "))
             n=int(input("Seleccione nombre del  implante: \n1-Marcapasos\n2-Stend coronario\n3-Implante dental\n4-Implante de rodilla\n5-Implante de cadera"))
             paciente=input("Ingresa nombre del paciente asociado al implante: ")
@@ -365,7 +385,7 @@ def main():
                 alambrico=input("Ingresar si es alambrico o inalambrio: ")
                 frecuencia_es=float(input("Ingresar frecuencia de estimulacion: "))
                 marcapasos=Marcapasos()
-                #asignacion de atributos 
+                #asignacion de atributos  por medio de metodo marcapasos de haber creado el objeto tipo Marcapasos 
                 marcapasos.setNumeroSerie(numero_serie)
                 marcapasos.setPaciente(paciente)
                 marcapasos.setFecha(fecha)
@@ -474,16 +494,17 @@ def main():
                 sistema.agregarImplante(numero_serie,implante_cadera)
 
         elif menu == 2:   #Eliminar
+            #Unicament se pide el nnumero de serie para que el metodo nada mas haga el proceso de verificacion y elimine del diccionario
             numero_serie = int(input("Ingrese el numero de serie del implante: "))
             sistema.eliminarImplante(numero_serie)
 
         elif menu == 3:      #Editar informacion
             numero_serie = int(input("Ingrese el numero de serie del implante: "))
-            if sistema.verificacion(numero_serie):
+            if sistema.verificacion(numero_serie):    #Se hizo una vericficacion de implante externa al metodo editar_info de la clase sistema 
                 sistema.editar_inf(numero_serie)
 
         elif menu == 4:        #Vizualizar inventario
-            sistema.verInventario()
+            sistema.verInventario()   #unicamnete se llamo el metodo por medio del objeto 
         
         elif menu==5:           #Salida
             break
