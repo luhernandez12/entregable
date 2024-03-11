@@ -1,23 +1,3 @@
-class Implante:  #Clase padre, contiene la informacion asociada que debe tener cada implante, se le asigno un numero de serie para que la verificacion sea mas sencilla 
-    def __init__(self):
-        self.__numeroSerie = 0
-        self.__nombre = ""
-       
-
-    #setters
-    def setNumeroSerie(self, numero):
-        self.__numeroSerie = numero
-    def setNombre(self, nombre):
-        self.__nombre = nombre
-    
-    
-    #getters
-    def getNumeroSerie(self):
-        return self.__numeroSerie
-    def getNombre(self):
-        return self.__nombre
-   
-
 class RegistroyAsigenacion:
     def __init__(self):
         self.__paciente=""
@@ -68,9 +48,26 @@ class SeguimientoImplante:
     def getMantenimiento(self):
         return self.__mantenimiento
 
+class Implante(RegistroyAsigenacion,SeguimientoImplante):  #Clase padre, contiene la informacion asociada que debe tener cada implante, se le asigno un numero de serie para que la verificacion sea mas sencilla 
+    def __init__(self):
+        self.__numeroSerie = 0
+        self.__nombre = ""
+       
 
+    #setters
+    def setNumeroSerie(self, numero):
+        self.__numeroSerie = numero
+    def setNombre(self, nombre):
+        self.__nombre = nombre
+    
+    
+    #getters
+    def getNumeroSerie(self):
+        return self.__numeroSerie
+    def getNombre(self):
+        return self.__nombre
         
-class Marcapasos(Implante, RegistroyAsigenacion,SeguimientoImplante): #Clase marcapasos con los atributos especificos 
+class Marcapasos(Implante): #Clase marcapasos con los atributos especificos 
     def __init__(self):
         super().__init__()
         self.__electrodos = 0
@@ -93,7 +90,7 @@ class Marcapasos(Implante, RegistroyAsigenacion,SeguimientoImplante): #Clase mar
     def getFrecuencia(self):
         return self.__frecuencia_estimulacion
 
-class Stend(Implante,RegistroyAsigenacion,SeguimientoImplante):
+class Stend(Implante):
     def __init__(self):
         super().__init__()
         self.__longitud = 0.0
@@ -117,7 +114,7 @@ class Stend(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def getMaterial(self):
         return self.__material
 
-class ImplanteDental(Implante,RegistroyAsigenacion,SeguimientoImplante):
+class ImplanteDental(Implante):
     def __init__(self):
         super().__init__()
         self.__forma = ""
@@ -140,7 +137,7 @@ class ImplanteDental(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def getMaterial(self):
         return self.__material
 
-class ImplanteRodillas(Implante,RegistroyAsigenacion,SeguimientoImplante):
+class ImplanteRodillas(Implante):
     def __init__(self):
         super().__init__()
         self.__materiales = ""
@@ -163,7 +160,7 @@ class ImplanteRodillas(Implante,RegistroyAsigenacion,SeguimientoImplante):
     def getTipoF(self):
         return self.__tipoFijacion
 
-class ImplanteCadera(Implante,RegistroyAsigenacion,SeguimientoImplante):
+class ImplanteCadera(Implante):
     def __init__(self):
         super().__init__()
         self.__materiales = ""
